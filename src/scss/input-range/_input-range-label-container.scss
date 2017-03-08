@@ -2,7 +2,12 @@
   left: -50%;
   position: relative;
 
+  .input-range__label--min & {
+    left: 0;
+  }
+
   .input-range__label--max & {
-    left: 50%;
+    left: initial;
+    right: 0;
   }
 }

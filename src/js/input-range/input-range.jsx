@@ -34,6 +34,9 @@ export default class InputRange extends React.Component {
       onChangeComplete: React.PropTypes.func,
       step: React.PropTypes.number,
       value: valuePropType,
+      suggestedValue: valuePropType,
+      withActive: React.PropTypes.bool,
+      singleValueError: React.PropTypes.number,
     };
   }
 
@@ -49,6 +52,9 @@ export default class InputRange extends React.Component {
       maxValue: 10,
       minValue: 0,
       step: 1,
+      withActive: true,
+      singleValueError: 0,
+      suggestedValue: 0,
     };
   }
 
@@ -66,6 +72,8 @@ export default class InputRange extends React.Component {
    * @param {Function} [props.onChangeComplete]
    * @param {number} [props.step = 1]
    * @param {number|Range} props.value
+   * @param {number|Range} props.suggestedValue
+   * @param {boolean} [props.withActive = false]
    */
   constructor(props) {
     super(props);
@@ -106,6 +114,9 @@ export default class InputRange extends React.Component {
    */
   getComponentClassName() {
     if (!this.props.disabled) {
+      if (!this.props.withActive) {
+        return `${this.props.classNames.inputRange} without-active`;
+      }
       return this.props.classNames.inputRange;
     }
 
@@ -177,6 +188,18 @@ export default class InputRange extends React.Component {
    */
   isMultiValue() {
     return isObject(this.props.value);
+  }
+
+  isSuggestedMulti() {
+    return this.hasSuggested() && isObject(this.props.suggestedValue);
+  }
+
+  hasSuggested() {
+    return isObject(this.props.suggestedValue) || this.props.suggestedValue;
+  }
+
+  hasSingleValueError() {
+    return this.props.singleValueError > 0;
   }
 
   /**
@@ -576,6 +599,47 @@ export default class InputRange extends React.Component {
     const componentClassName = this.getComponentClassName();
     const values = valueTransformer.getValueFromProps(this.props, this.isMultiValue());
     const percentages = valueTransformer.getPercentagesFromValues(values, this.props.minValue, this.props.maxValue);
+    const suggestedValues = valueTransformer.getSuggestedValueFromProps(this.props, this.isSuggestedMulti());
+    const suggestedPercentages = valueTransformer.getPercentagesFromValues(suggestedValues, this.props.minValue, this.props.maxValue);
+    const midValue = (this.props.minValue + this.props.maxValue) / 2;
+    let errorPercentages = { min: null, max: null };
+    let errorLabels = [];
+    if (this.props.singleValueError > 0) {
+      const min = this.props.value - this.props.singleValueError;
+      const max = this.props.value + this.props.singleValueError;
+      errorPercentages = valueTransformer.getPercentagesFromValues({
+        min,
+        max,
+      }, this.props.minValue, this.props.maxValue);
+      const errMinStyle = {
+        left: `${errorPercentages.min * 100}%`,
+      };
+      const errorMinLabel = (
+        <Label
+          classNames={this.props.classNames}
+          formatLabel={this.props.formatLabel}
+          type="err-min"
+          style={errMinStyle}
+          key={'err-min'}>
+          {min}
+        </Label>
+      );
+      const errMaxStyle = {
+        left: `${errorPercentages.max * 100}%`,
+      };
+      const errorMaxLabel = (
+        <Label
+          classNames={this.props.classNames}
+          formatLabel={this.props.formatLabel}
+          type="err-max"
+          style={errMaxStyle}
+          key={'err-max'}>
+          {max}
+        </Label>
+      );
+      errorLabels = [errorMinLabel, errorMaxLabel];
+    }
+
 
     return (
       <div
@@ -593,11 +657,25 @@ export default class InputRange extends React.Component {
           {this.props.minValue}
         </Label>
 
+        <Label
+          classNames={this.props.classNames}
+          formatLabel={this.props.formatLabel}
+          type="mid">
+          {midValue}
+        </Label>
+
+        {errorLabels}
+
         <Track
           classNames={this.props.classNames}
           ref={(trackNode) => { this.trackNode = trackNode; }}
           percentages={percentages}
-          onTrackMouseDown={this.handleTrackMouseDown}>
+          suggestedPercentages={suggestedPercentages}
+          onTrackMouseDown={this.handleTrackMouseDown}
+          withActive={this.props.withActive}
+          isMultiValue={this.isMultiValue()}
+          withError={this.hasSingleValueError()}
+          errorPercentages={errorPercentages}>
 
           {this.renderSliders()}
         </Track>

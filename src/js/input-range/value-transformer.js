@@ -48,6 +48,30 @@ export function getValueFromProps(props, isMultiValue) {
   };
 }
 
+export function getSuggestedValueFromProps(props, isMultiValue) {
+  if (isMultiValue) {
+    return { ...props.suggestedValue };
+  }
+
+  return {
+    min: props.suggestedValue - props.step,
+    max: props.suggestedValue,
+  };
+}
+
+export function getValueErrorFromProps(props, isMultiValue) {
+  if (isMultiValue) {
+    return { ...props.value };
+  }
+
+  if (props.singleValueError > 0 && !isMultiValue) {
+    return {
+      min: props.value - props.singleValueError,
+      max: props.value + props.singleValueError,
+    };
+  }
+}
+
 /**
  * Convert a model value into a percentage value
  * @ignore

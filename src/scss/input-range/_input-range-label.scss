@@ -7,7 +7,10 @@
 }
 
 .input-range__label--min,
-.input-range__label--max {
+.input-range__label--mid,
+.input-range__label--max,
+.input-range__label--err-min,
+.input-range__label--err-max {
   bottom: $input-range-label-position-bottom;
   position: absolute;
 }
@@ -20,7 +23,30 @@
   right: 0;
 }
 
+.input-range__label--mid {
+  left: 50%;
+}
+
 .input-range__label--value {
   position: absolute;
   top: $input-range-label-value-position-top;
+}
+
+.input-range__label--err-max span,
+.input-range__label--err-min span {
+  left: 0;
+  padding: 4px 1px 4px 7px;
+  width: 34px;
+  background-color: #0299cc;
+  text-align: left;
+  display: block;
+  color: white;
+}
+
+.input-range__label--err-max span {
+  left: 0;
+}
+
+.input-range__label--err-min span {
+  left: -100%;
 }

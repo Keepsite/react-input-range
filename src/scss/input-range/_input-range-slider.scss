@@ -30,6 +30,39 @@
   }
 }
 
-.input-range__slider-container {
-  transition: $input-range-slider-container-transition;
+.input-range__slider-comps {
+  appearance: none;
+  background: url('/img/group-28-copy.png') center center no-repeat;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  display: block;
+  height: $input-range-comps-slider-height;
+  margin-left: $input-range-comps-slider-width / -2;
+  margin-top: 2px;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  transition: $input-range-slider-transition;
+  width: $input-range-comps-slider-width;
+
+  &:active {
+    transform: $input-range-slider-active-transform;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 $input-range-slider-focus-box-shadow-radius $input-range-slider-focus-box-shadow-color;
+  }
+
+  .input-range--disabled & {
+    background: $input-range-slider-disabled-background;
+    border: $input-range-slider-disabled-border;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+
+.without-active .input-range__track .input-range__slider-container {
+  top: $input-range-track-height;
 }

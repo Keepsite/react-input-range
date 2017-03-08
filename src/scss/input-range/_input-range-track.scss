@@ -1,6 +1,6 @@
 .input-range__track {
   background: $input-range-track-background;
-  border-radius: $input-range-track-height;
+  border-radius: 0;
   cursor: pointer;
   display: block;
   height: $input-range-track-height;
@@ -23,3 +23,17 @@
 .input-range__track--active {
   background: $input-range-track-active-background;
 }
+
+.input-range__track--active-green {
+  background: $input-range-green;
+}
+
+.input-range__track--suggested {
+  background: $input-range-track-suggested-background;
+  height: 1.64rem;
+  margin-top: -1.64rem / 2 + $input-range-track-height / 2;
+  margin-bottom: calc(calc(-1.64rem / 2) - 2px);
+  border-radius: 0;
+}
+
+

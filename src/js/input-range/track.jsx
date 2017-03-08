@@ -19,6 +19,11 @@ export default class Track extends React.Component {
       classNames: React.PropTypes.objectOf(React.PropTypes.string).isRequired,
       onTrackMouseDown: React.PropTypes.func.isRequired,
       percentages: React.PropTypes.objectOf(React.PropTypes.number).isRequired,
+      withActive: React.PropTypes.bool,
+      suggestedPercentages: React.PropTypes.objectOf(React.PropTypes.number),
+      isMultiValue: React.PropTypes.bool,
+      withError: React.PropTypes.bool,
+      errorPercentages: React.PropTypes.objectOf(React.PropTypes.number),
     };
   }
 
@@ -57,6 +62,20 @@ export default class Track extends React.Component {
     return { left, width };
   }
 
+  getSuggestedTrackStyle() {
+    const width = `${(this.props.suggestedPercentages.max - this.props.suggestedPercentages.min) * 100}%`;
+    const left = `${this.props.suggestedPercentages.min * 100}%`;
+
+    return { left, width };
+  }
+
+  getActiveTrackStyleWithError() {
+    const width = `${(this.props.errorPercentages.max - this.props.errorPercentages.min) * 100}%`;
+    const left = `${this.props.errorPercentages.min * 100}%`;
+
+    return { left, width };
+  }
+
   /**
    * @private
    * @param {SyntheticEvent} event - User event
@@ -89,7 +108,23 @@ export default class Track extends React.Component {
    * @return {JSX.Element}
    */
   render() {
-    const activeTrackStyle = this.getActiveTrackStyle();
+    let activeTrack;
+    if (this.props.withActive && !this.props.isMultiValue && this.props.withError) {
+      const activeTrackStyle = this.getActiveTrackStyleWithError();
+      activeTrack = (<div style={activeTrackStyle} className={this.props.classNames.activeTrack} />);
+    } else if (this.props.withActive) {
+      const activeTrackStyle = this.getActiveTrackStyle();
+      activeTrack = (<div style={activeTrackStyle} className={this.props.classNames.activeTrack} />);
+    }
+
+    let suggestedTrack;
+    if (this.props.suggestedPercentages.max !== 0) {
+      const suggestedTrackStyle = this.getSuggestedTrackStyle();
+      if (!this.props.isMultiValue) {
+        suggestedTrackStyle.transform = 'translateX(-50%)';
+      }
+      suggestedTrack = (<div style={suggestedTrackStyle} className={this.props.classNames.suggestedTrack} />);
+    }
 
     return (
       <div
@@ -97,9 +132,8 @@ export default class Track extends React.Component {
         onMouseDown={this.handleMouseDown}
         onTouchStart={this.handleTouchStart}
         ref={(node) => { this.node = node; }}>
-        <div
-          style={activeTrackStyle}
-          className={this.props.classNames.activeTrack} />
+        {suggestedTrack}
+        {activeTrack}
         {this.props.children}
       </div>
     );
