@@ -120,8 +120,8 @@ export default class Track extends React.Component {
     let suggestedTrack;
     if (this.props.suggestedPercentages.max !== 0) {
       const suggestedTrackStyle = this.getSuggestedTrackStyle();
-      if (!this.props.isMultiValue) {
-        suggestedTrackStyle.transform = 'translateX(-50%)';
+      if (!this.props.isMultiValue && !this.props.withError) {
+        suggestedTrackStyle.transform = 'translateX(50%)';
       }
       suggestedTrack = (<div style={suggestedTrackStyle} className={this.props.classNames.suggestedTrack} />);
     }

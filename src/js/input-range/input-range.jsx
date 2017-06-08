@@ -618,7 +618,7 @@ export default class InputRange extends React.Component {
         <Label
           classNames={this.props.classNames}
           formatLabel={this.props.formatLabel}
-          type="err-min"
+          type="errMin"
           style={errMinStyle}
           key={'err-min'}>
           {min}
@@ -631,7 +631,7 @@ export default class InputRange extends React.Component {
         <Label
           classNames={this.props.classNames}
           formatLabel={this.props.formatLabel}
-          type="err-max"
+          type="errMax"
           style={errMaxStyle}
           key={'err-max'}>
           {max}

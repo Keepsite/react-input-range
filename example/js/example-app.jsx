@@ -29,8 +29,8 @@ export default class ExampleApp extends React.Component {
       maxLabel: 'input-range__label input-range__label--max',
       minLabel: 'input-range__label input-range__label--min',
       midLabel: 'input-range__label input-range__label--mid',
-      errMinLabel: 'input-range__label input-range__label--errMin',
-      errMaxLabel: 'input-range__label input-range__label--errMax',
+      errMinLabel: 'input-range__label input-range__label--err-min',
+      errMaxLabel: 'input-range__label input-range__label--err-max',
       slider: 'input-range__slider-comps',
       sliderContainer: 'input-range__slider-container',
       track: 'input-range__track input-range__track--background',
@@ -45,7 +45,7 @@ export default class ExampleApp extends React.Component {
           value={this.state.value}
           onChange={value => this.setState({ value })}
           withActive={false}
-          suggestedValue={13000}
+          suggestedValue={35500}
           step={500}
           classNames={COMPS_CLASS_NAMES}
           onChangeComplete={value => console.log(value)} />
