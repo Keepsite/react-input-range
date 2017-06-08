@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * @ignore
@@ -27,9 +28,9 @@ export default function Label(props) {
  * @property {Function} type
  */
 Label.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  classNames: React.PropTypes.objectOf(React.PropTypes.string).isRequired,
-  formatLabel: React.PropTypes.func,
-  type: React.PropTypes.string.isRequired,
-  style: React.PropTypes.objectOf(React.PropTypes.string),
+  children: PropTypes.node.isRequired,
+  classNames: PropTypes.objectOf(PropTypes.string).isRequired,
+  formatLabel: PropTypes.func,
+  type: PropTypes.string.isRequired,
+  style: PropTypes.objectOf(PropTypes.string),
 };

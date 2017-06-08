@@ -66,6 +66,7 @@ export default class ExampleApp extends React.Component {
           withActive={false}
           step={10000}
           onChange={value => this.setState({ value3: value })}
+          onChangeStart={value => console.log('onChangeStart with value =', value)}
           onChangeComplete={value => console.log(value)} />
 
         <InputRange

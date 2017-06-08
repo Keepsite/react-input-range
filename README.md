@@ -9,7 +9,7 @@ A CodePen demo is available [here](http://codepen.io/davidchin/full/GpNvqw/).
 
 ## Installation
 
-1. Install `react-input-range` using npm. `npm install react-input-range`
+1. Install `react-input-range` using npm (or [yarn]). `npm install react-input-range`
 2. Import `react-input-range` to use `InputRange` component.
 3. Optionally, import `react-input-range/lib/css/index.css` if you want to apply the default styling.
 
@@ -36,7 +36,7 @@ class App extends React.Component {
         maxValue={20}
         minValue={0}
         value={this.state.value}
-        onChange={value => this.setState(value)} />
+        onChange={value => this.setState({ value })} />
     );
   }
 }
@@ -62,7 +62,7 @@ class App extends React.Component {
         maxValue={20}
         minValue={0}
         value={this.state.value}
-        onChange={value => this.setState(value)} />
+        onChange={value => this.setState({ value })} />
     );
   }
 }
@@ -73,7 +73,7 @@ To format labels:
 <InputRange
   formatLabel={value => `${value}cm`}
   value={this.state.value}
-  onChange={value => this.setState(value)} />
+  onChange={value => this.setState({ value })} />
 ```
 
 To specify the amount of increment/decrement
@@ -81,7 +81,7 @@ To specify the amount of increment/decrement
 <InputRange
   step={2}
   value={this.state.value}
-  onChange={value => this.setState(value)} />
+  onChange={value => this.setState({ value })} />
 ```
 
 ## API
@@ -124,6 +124,10 @@ Set a name for your form component.
 
 Whenever your user interacts with your component (i.e.: dragging a slider), this function gets called. Inside the function, you should assign the new value to your component.
 
+#### onChangeStart: (value: number | Range): void
+
+Whenever your user starts interacting with your component (i.e.: `onMouseDown`, or `onTouchStart`), this function gets called.
+
 #### onChangeComplete: (value: number | Range): void
 
 Every mouse / touch event can trigger multiple updates, therefore causing `onChange` callback to fire multiple times. On the other hand, `onChangeComplete` callback only gets called when the user stops dragging.
@@ -156,19 +160,22 @@ Set the current value for your component. If only a single number is provided, o
 
 ## Development
 
-If you want to work on this project locally, you need to grab all of its dependencies.
+If you want to work on this project locally, you need to grab all of its dependencies, for which 
+we recommend using [yarn]. You can find the instructions to setup yarn [here](https://yarnpkg.com/docs/install).
 ```
-npm install
+yarn install
 ```
 
 After that, you should be able run to preview
 ```
-npm run dev
+yarn dev
 ```
 
 To test
 ```
-npm test
+yarn test
 ```
 
 Contributions are welcome. :)
+
+[yarn]: https://yarnpkg.com/

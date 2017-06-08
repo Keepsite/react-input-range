@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import * as valueTransformer from './value-transformer';
 import DEFAULT_CLASS_NAMES from './default-class-names';
@@ -22,17 +23,18 @@ export default class InputRange extends React.Component {
    */
   static get propTypes() {
     return {
-      ariaLabelledby: React.PropTypes.string,
-      ariaControls: React.PropTypes.string,
-      classNames: React.PropTypes.objectOf(React.PropTypes.string),
-      disabled: React.PropTypes.bool,
-      formatLabel: React.PropTypes.func,
+      ariaLabelledby: PropTypes.string,
+      ariaControls: PropTypes.string,
+      classNames: PropTypes.objectOf(PropTypes.string),
+      disabled: PropTypes.bool,
+      formatLabel: PropTypes.func,
       maxValue: rangePropType,
       minValue: rangePropType,
-      name: React.PropTypes.string,
-      onChange: React.PropTypes.func.isRequired,
-      onChangeComplete: React.PropTypes.func,
-      step: React.PropTypes.number,
+      name: PropTypes.string,
+      onChangeStart: PropTypes.func,
+      onChange: PropTypes.func.isRequired,
+      onChangeComplete: PropTypes.func,
+      step: PropTypes.number,
       value: valuePropType,
       suggestedValue: valuePropType,
       withActive: React.PropTypes.bool,
@@ -70,6 +72,7 @@ export default class InputRange extends React.Component {
    * @param {string} [props.name]
    * @param {string} props.onChange
    * @param {Function} [props.onChangeComplete]
+   * @param {Function} [props.onChangeStart]
    * @param {number} [props.step = 1]
    * @param {number|Range} props.value
    * @param {number|Range} props.suggestedValue
@@ -433,11 +436,13 @@ export default class InputRange extends React.Component {
    */
   @autobind
   handleInteractionStart() {
-    if (!this.props.onChangeComplete || isDefined(this.startValue)) {
-      return;
+    if (this.props.onChangeStart) {
+      this.props.onChangeStart(this.props.value);
     }
 
-    this.startValue = this.props.value;
+    if (this.props.onChangeComplete && !isDefined(this.startValue)) {
+      this.startValue = this.props.value;
+    }
   }
 
   /**
