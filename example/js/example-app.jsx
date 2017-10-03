@@ -72,7 +72,7 @@ export default class ExampleApp extends React.Component {
         <InputRange
           maxValue={20}
           minValue={0}
-          labelSuffix="kg"
+          formatLabel={value => `${value}kg`}
           value={this.state.value4}
           suggestedValue={{ min: 3, max: 6 }}
           onChange={value => this.setState({ value4: value })}
@@ -90,6 +90,7 @@ export default class ExampleApp extends React.Component {
           onChange={value => this.setState({ value5: value })}
           onChangeComplete={value => console.log(value)} />
       </form>
+          /* draggableTrack */
     );
   }
 }

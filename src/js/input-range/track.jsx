@@ -11,6 +11,8 @@ export default class Track extends React.Component {
    * @return {Object}
    * @property {Function} children
    * @property {Function} classNames
+   * @property {Boolean} draggableTrack
+   * @property {Function} onTrackDrag
    * @property {Function} onTrackMouseDown
    * @property {Function} percentages
    */
@@ -18,6 +20,8 @@ export default class Track extends React.Component {
     return {
       children: PropTypes.node.isRequired,
       classNames: PropTypes.objectOf(PropTypes.string).isRequired,
+      draggableTrack: PropTypes.bool,
+      onTrackDrag: PropTypes.func,
       onTrackMouseDown: PropTypes.func.isRequired,
       percentages: PropTypes.objectOf(PropTypes.number).isRequired,
       withActive: PropTypes.bool,
@@ -31,6 +35,8 @@ export default class Track extends React.Component {
   /**
    * @param {Object} props
    * @param {InputRangeClassNames} props.classNames
+   * @param {Boolean} props.draggableTrack
+   * @param {Function} props.onTrackDrag
    * @param {Function} props.onTrackMouseDown
    * @param {number} props.percentages
    */
@@ -42,6 +48,7 @@ export default class Track extends React.Component {
      * @type {?Component}
      */
     this.node = null;
+    this.trackDragEvent = null;
   }
 
   /**
@@ -78,6 +85,75 @@ export default class Track extends React.Component {
   }
 
   /**
+   * Listen to mousemove event
+   * @private
+   * @return {void}
+   */
+  addDocumentMouseMoveListener() {
+    this.removeDocumentMouseMoveListener();
+    this.node.ownerDocument.addEventListener('mousemove', this.handleMouseMove);
+  }
+
+  /**
+   * Listen to mouseup event
+   * @private
+   * @return {void}
+   */
+  addDocumentMouseUpListener() {
+    this.removeDocumentMouseUpListener();
+    this.node.ownerDocument.addEventListener('mouseup', this.handleMouseUp);
+  }
+
+  /**
+   * @private
+   * @return {void}
+   */
+  removeDocumentMouseMoveListener() {
+    this.node.ownerDocument.removeEventListener('mousemove', this.handleMouseMove);
+  }
+
+  /**
+   * @private
+   * @return {void}
+   */
+  removeDocumentMouseUpListener() {
+    this.node.ownerDocument.removeEventListener('mouseup', this.handleMouseUp);
+  }
+
+  /**
+   * @private
+   * @param {SyntheticEvent} event
+   * @return {void}
+   */
+  @autobind
+  handleMouseMove(event) {
+    if (!this.props.draggableTrack) {
+      return;
+    }
+
+    if (this.trackDragEvent !== null) {
+      this.props.onTrackDrag(event, this.trackDragEvent);
+    }
+
+    this.trackDragEvent = event;
+  }
+
+  /**
+   * @private
+   * @return {void}
+   */
+  @autobind
+  handleMouseUp() {
+    if (!this.props.draggableTrack) {
+      return;
+    }
+
+    this.removeDocumentMouseMoveListener();
+    this.removeDocumentMouseUpListener();
+    this.trackDragEvent = null;
+  }
+
+  /**
    * @private
    * @param {SyntheticEvent} event - User event
    */
@@ -91,6 +167,11 @@ export default class Track extends React.Component {
     };
 
     this.props.onTrackMouseDown(event, position);
+
+    if (this.props.draggableTrack) {
+      this.addDocumentMouseMoveListener();
+      this.addDocumentMouseUpListener();
+    }
   }
 
   /**
