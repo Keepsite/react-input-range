@@ -38,8 +38,8 @@ export default class InputRange extends React.Component {
       step: PropTypes.number,
       value: valuePropType,
       suggestedValue: valuePropType,
-      withActive: React.PropTypes.bool,
-      singleValueError: React.PropTypes.number,
+      withActive: PropTypes.bool,
+      singleValueError: PropTypes.number,
     };
   }
 
